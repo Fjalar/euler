@@ -47,7 +47,7 @@ pub mod big_u {
                 }
             }
             if carry != 0 {
-                self.0.push(1);
+                self.0.push(carry as u32);
             }
         }
     }
@@ -74,6 +74,12 @@ pub mod big_u {
                 write!(f, "{:09}", self.0[i])?
             }
             Ok(())
+        }
+    }
+
+    impl fmt::Debug for BigU {
+        fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+            f.debug_tuple("BigU").field(&self.0).finish()
         }
     }
 }
