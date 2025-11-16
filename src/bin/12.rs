@@ -2,19 +2,6 @@ fn main() {
     // primes calculation from 10.rs
     let mut primes = vec![2u32];
     let mut x = 3u32;
-    'outer: loop {
-        if x > 200_000 {
-            break;
-        }
-        for p in &primes {
-            if x.is_multiple_of(*p) {
-                x += 2;
-                continue 'outer;
-            }
-        }
-        primes.push(x);
-        x += 2;
-    }
 
     let mut index = 1u32;
     let mut triangle = 1u32;
@@ -26,6 +13,9 @@ fn main() {
             .map(|divisor| {
                 let mut tri = triangle;
                 let mut count = 0;
+                // https://en.wikipedia.org/wiki/Divisor_function#Properties
+                // numer of divisors = Product_n((prime_factor_exponent_n + 1))
+                // number of divisors = (prime_factor_exponent_1 + 1)(prime_factor_exponent_2 + 1)(prime_factor_exponent_3 +1)(...)
                 while tri.is_multiple_of(*divisor) {
                     count += 1;
                     tri /= divisor;
@@ -41,5 +31,16 @@ fn main() {
 
         index += 1;
         triangle += index;
+
+        'outer: while triangle.isqrt() > *primes.last().unwrap() {
+            for p in &primes {
+                if x.is_multiple_of(*p) {
+                    x += 2;
+                    continue 'outer;
+                }
+            }
+            primes.push(x);
+            x += 2;
+        }
     }
 }
