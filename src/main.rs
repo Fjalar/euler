@@ -1,16 +1,25 @@
-use std::collections::HashMap;
 use std::fs::read_dir;
 use std::process::Command;
-use std::time::Instant;
+use std::time::{Duration, Instant};
 
 fn main() {
     let all = read_dir("./src/bin/")
         .unwrap()
         .map(|dir| dir.unwrap().file_name().into_string().unwrap());
 
-    _ = Command::new("cargo build --release --bin").spawn();
+    println!(
+        "{}",
+        String::from_utf8(
+            Command::new("cargo")
+                .args(["build", "--release", "--bins"])
+                .output()
+                .unwrap()
+                .stdout
+        )
+        .unwrap()
+    );
 
-    let mut times = Vec::<(f32, String)>::new();
+    let mut times = Vec::<(Duration, String)>::new();
 
     let start_all = Instant::now();
     for name in all {
@@ -21,21 +30,28 @@ fn main() {
             "{}",
             String::from_utf8(Command::new(relative_path).output().unwrap().stdout).unwrap()
         );
-        times.push((before.elapsed().as_secs_f32(), name.clone()));
+        times.push((before.elapsed(), name.clone()));
     }
 
-    let total_time = start_all.elapsed().as_secs_f32();
+    let total_time = start_all.elapsed();
+
+    let mins = total_time.as_secs() / 60;
+    let secs = total_time.as_secs() - mins * 60;
+    let millis = total_time.as_millis() % 1000;
+    let micros = total_time.as_micros() % 1000;
 
     println!(
-        "Took {:.0}min {}s seconds for all available solutions to complete",
-        total_time / 60.0,
-        total_time % 60.0
+        "Took {mins}min {secs}s {millis}ms {micros:3.}us for all available solutions to complete"
     );
 
-    times.sort_by(|(time1, _), (time2, _)| time2.total_cmp(time1));
+    times.sort_by(|(time1, _), (time2, _)| time2.cmp(time1));
 
     println!("Time in descending order: ");
     for (time, name) in times {
-        println!("{name}: {:.0}min {}s", time / 60.0, time % 60.0);
+        let mins = time.as_secs() / 60;
+        let secs = time.as_secs() - mins * 60;
+        let millis = time.as_millis() % 1000;
+        let micros = time.as_micros() % 1000;
+        println!("{name}: \t{mins}min\t{secs}s\t{millis}ms\t{micros:3.}us");
     }
 }
