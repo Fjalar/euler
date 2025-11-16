@@ -1,11 +1,38 @@
 fn main() {
+    // primes calculation from 10.rs
+    let mut primes = vec![2u32];
+    let mut x = 3u32;
+    'outer: loop {
+        if x > 200_000 {
+            break;
+        }
+        for p in &primes {
+            if x.is_multiple_of(*p) {
+                x += 2;
+                continue 'outer;
+            }
+        }
+        primes.push(x);
+        x += 2;
+    }
+
     let mut index = 1u32;
     let mut triangle = 1u32;
 
     loop {
-        let divisors = (1..=(triangle))
-            .filter(|&x| triangle.is_multiple_of(x))
-            .count();
+        let divisors = primes
+            .iter()
+            .filter(|&x| triangle.is_multiple_of(*x))
+            .map(|divisor| {
+                let mut tri = triangle;
+                let mut count = 0;
+                while tri.is_multiple_of(*divisor) {
+                    count += 1;
+                    tri /= divisor;
+                }
+                count + 1
+            })
+            .product::<u32>();
 
         if divisors > 500 {
             println!("{triangle}");
