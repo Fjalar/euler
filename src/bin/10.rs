@@ -1,21 +1,13 @@
 fn main() {
-    let mut primes = vec![2u64];
-
-    let mut x = 3u64;
-
-    'outer: loop {
-        if x > 2_000_000 {
-            break;
+    let primes = (3..2_000_000u64).step_by(2).filter(|&num| {
+        let mut divisor = 3u64;
+        while (divisor * divisor) < 2_000_000u64 && divisor < num {
+            if num.is_multiple_of(divisor) {
+                return false;
+            };
+            divisor += 2;
         }
-        for p in &primes {
-            if x.is_multiple_of(*p) {
-                x += 2;
-                continue 'outer;
-            }
-        }
-        primes.push(x);
-        x += 2;
-    }
-
-    println!("{}", primes.iter().sum::<u64>());
+        true
+    });
+    println!("{}", primes.sum::<u64>() + 2);
 }
