@@ -52,6 +52,6 @@ fn main() {
         let secs = time.as_secs() - mins * 60;
         let millis = time.as_millis() % 1000;
         let micros = time.as_micros() % 1000;
-        println!("{name}: \t{mins}min\t{secs}s\t{millis}ms\t{micros:3.}us");
+        println!("{name:>6}: {mins:>4}min {secs:>4}s {millis:>4}ms {micros:3.}us");
     }
 }
