@@ -12,8 +12,15 @@ checksum = "48c757948c5ede0e46177b7add2e67155f70e33c07fea8284df6576da70b3719"
 name = "euler"
 version = "0.1.0"
 dependencies = [
+ "intset",
  "itertools",
 ]
+
+[[package]]
+name = "intset"
+version = "1.0.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6c0c5728a5d09022d01c6f8a716796123933297460344501b25d2e1bfd8e1db2"
 
 [[package]]
 name = "itertools"

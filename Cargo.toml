@@ -5,4 +5,5 @@ edition = "2024"
 default-run = "euler"
 
 [dependencies]
+intset = "1.0.2"
 itertools = "0.14.0"
