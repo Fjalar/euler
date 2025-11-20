@@ -3,7 +3,7 @@ use std::collections::BTreeSet;
 fn main() {
     let mut amicable_set = BTreeSet::new();
 
-    for i in (1..10_000u64) {
+    for i in 1..10_000u64 {
         if amicable_set.contains(&i) {
             continue;
         }
